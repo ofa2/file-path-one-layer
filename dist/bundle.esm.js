@@ -1,2 +1,28 @@
-import Promise from"bluebird";import fs from"fs-extra";import path from"path";async function filePathOneLayer(t){let a=await fs.readdir(t);return(await Promise.map(a,a=>{let e=path.join(t,a),r=path.parse(e);return".js"!==r.ext?null:fs.stat(e).then(t=>Object.assign({path:e,stat:t},r))})).filter(t=>t&&t.stat&&t.stat.isFile())}export default filePathOneLayer;
+import Promise from 'bluebird';
+import fs from 'fs-extra';
+import path from 'path';
+
+async function filePathOneLayer(modelsPath) {
+  let fileNames = await fs.readdir(modelsPath);
+  let files = await Promise.map(fileNames, fileName => {
+    let filePath = path.join(modelsPath, fileName);
+    let fileInfo = path.parse(filePath);
+
+    if (fileInfo.ext !== '.js') {
+      return null;
+    }
+
+    return fs.stat(filePath).then(stat => {
+      return Object.assign({
+        path: filePath,
+        stat
+      }, fileInfo);
+    });
+  });
+  return files.filter(file => {
+    return file && file.stat && file.stat.isFile();
+  });
+}
+
+export default filePathOneLayer;
 //# sourceMappingURL=bundle.esm.js.map

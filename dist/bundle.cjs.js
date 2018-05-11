@@ -1,2 +1,32 @@
-"use strict";function _interopDefault(t){return t&&"object"==typeof t&&"default"in t?t.default:t}var Promise=_interopDefault(require("bluebird")),fs=_interopDefault(require("fs-extra")),path=_interopDefault(require("path"));async function filePathOneLayer(t){let e=await fs.readdir(t);return(await Promise.map(e,e=>{let a=path.join(t,e),r=path.parse(a);return".js"!==r.ext?null:fs.stat(a).then(t=>Object.assign({path:a,stat:t},r))})).filter(t=>t&&t.stat&&t.stat.isFile())}module.exports=filePathOneLayer;
+'use strict';
+
+function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
+
+var Promise = _interopDefault(require('bluebird'));
+var fs = _interopDefault(require('fs-extra'));
+var path = _interopDefault(require('path'));
+
+async function filePathOneLayer(modelsPath) {
+  let fileNames = await fs.readdir(modelsPath);
+  let files = await Promise.map(fileNames, fileName => {
+    let filePath = path.join(modelsPath, fileName);
+    let fileInfo = path.parse(filePath);
+
+    if (fileInfo.ext !== '.js') {
+      return null;
+    }
+
+    return fs.stat(filePath).then(stat => {
+      return Object.assign({
+        path: filePath,
+        stat
+      }, fileInfo);
+    });
+  });
+  return files.filter(file => {
+    return file && file.stat && file.stat.isFile();
+  });
+}
+
+module.exports = filePathOneLayer;
 //# sourceMappingURL=bundle.cjs.js.map
