@@ -1,5 +1,5 @@
 {
-  "name": "file-path-one-layer",
+  "name": "@ofa2/file-path-one-layer",
   "version": "1.0.2",
   "main": "dist/bundle.cjs.js",
   "module": "dist/bundle.esm.js",
