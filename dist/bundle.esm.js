@@ -8,7 +8,7 @@ async function filePathOneLayer(modelsPath) {
     let filePath = path.join(modelsPath, fileName);
     let fileInfo = path.parse(filePath);
 
-    if (fileInfo.ext !== '.js') {
+    if (fileInfo.ext !== '.js' && fileInfo.ext !== '.ts') {
       return null;
     }
 
